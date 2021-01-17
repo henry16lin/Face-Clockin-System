@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>graph</title>
+    <link href="{{ url_for('static', filename='bootstrap.min.css') }}" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+</head>
+<body>
+
+<style>
+img {
+    max-width: 100%;
+    max-height: 100%;
+}
+</style>
+
+    <center>
+    <img src="{{ image_path }}" alt="detect result" width="50%" height="50%">
+
+    <p></p>
+    
+    <p>{{remark}}</p>
+    <a href="/home">
+        <button type="button" class="btn btn-primary">try again</button>
+    </a>
+    </center>
+	<p> </p>
+	<p> </p>
+	<p> </p>
+	<p> </p>
+</body>
+</html>
