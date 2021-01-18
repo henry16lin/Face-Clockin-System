@@ -17,7 +17,7 @@ import pandas as pd
 import face_model
 import face_recognition
 
-from util import table_creator, send_mail
+from util import folder_checker, table_creator, daily_summary
 
 
 app = Flask(__name__)
@@ -153,14 +153,8 @@ def SetupLogger(loggerName, filename):
     logger.setLevel(logging.DEBUG)
     logger.addHandler(fileHandler)
     logger.addHandler(streamHandler)
-
-
-
-def folder_checker(path):
-    #path = os.path.join(cwd,'model_data')
-    if not os.path.exists(path):
-        os.makedirs(path)
     
+
 
 def old_face_cleaner():
     while True:
@@ -182,35 +176,7 @@ def time_checker(email_time):
                 print(t, 'time to sent email!')
                 daily_summary()
 
-        time.sleep(33)
-
-
-def daily_summary():
-    today = datetime.datetime.now().strftime("%Y-%m-%d")
-    print(today)
-    sql_str = ' select * from people_check_dtl where DATE = "%s";' %today
-    print(sql_str)
-    conn = sqlite3.connect("test.db")
-    daily_summary_pd = pd.read_sql_query(sql_str, conn)
-    conn.commit()
-    conn.close
-
-    csv_path = r'daily_summary/'+ today + 'summary.csv'
-    daily_summary_pd.to_csv( csv_path, index=False)
-
-    print('send summary email......')
-    email_senter(today, csv_path)
-
-
-def email_senter(date, attach_path):
-    try:
-        subject = date +' 簽到總表'
-        content = 'FYI'
-        csv_path = r'daily_summary/' + date +'Summary.csv'
-        send_mail(subject,content,attach_path_list=[csv_path])
-        print('successfully send email!')
-    except:
-        print('fail to send email. ignore it!')
+        time.sleep(59)
 
 
 
@@ -244,7 +210,7 @@ if __name__ == '__main__':
         registed_folder = os.path.join(cwd, 'registed_img_r100')
 
     
-    email_time = ['12:00', '21:00']
+    email_time = ['12:00', '16:40']
 
     # sub-tread check old image
     cleaner = threading.Thread(target = old_face_cleaner, daemon=True)

@@ -1,10 +1,18 @@
 import pandas as pd
+import datetime
+import sqlite3
 
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from email.mime.base import MIMEBase
 from email import encoders
+
+
+
+def folder_checker(path):
+    if not os.path.exists(path):
+        os.makedirs(path)
 
 
 def table_creator(cursor):
@@ -22,22 +30,39 @@ def table_creator(cursor):
         print('table already exist, parse data and insert to exists table...')
 
 
-'''
-def db_update_checker():
-    # whether db has update
-    return True/False
+
+def daily_summary():
+    today = datetime.datetime.now().strftime("%Y-%m-%d")
+    print(today)
+    sql_str = ' select * from people_check_dtl where DATE = "%s";' %today
+    print(sql_str)
+    conn = sqlite3.connect("test.db")
+    daily_summary_pd = pd.read_sql_query(sql_str, conn)
+    conn.commit()
+    conn.close
+
+    csv_path = r'daily_summary/'+ today + 'summary.csv'
+    daily_summary_pd.to_csv( csv_path, index=False)
+
+    print('send summary email......')
+    email_senter(today, csv_path)
 
 
-def summary_daily_result:
-    # access sqlite and query daily result
-    return pd_dataframe
+def email_senter(date, attach_path):
+    try:
+        subject = date +' 簽到總表'
+        content = 'FYI'
+        csv_path = r'daily_summary/' + date +'Summary.csv'
+        send_mail(subject,content,attach_path_list=[csv_path])
+        print('successfully send email!')
+    except:
+        print('fail to send email. ignore it!')
 
-'''
 
 
 def send_mail(subject, content, attach_path_list=[]):
-    email_user = 'jiweilin0907@gmail.com'
-    email_send = ['peaceful0907@gmail.com']
+    email_user = 'your@mail.com'
+    email_send = ['receiver@mail.com']
     
     msg = MIMEMultipart()
     msg['From'] = email_user
@@ -61,7 +86,7 @@ def send_mail(subject, content, attach_path_list=[]):
     text = msg.as_string()
     server = smtplib.SMTP('smtp.gmail.com',587)
     server.starttls()
-    server.login("your@email.com", "password")
+    server.login("your@mail.com", "yourpassword")
     
     server.sendmail(email_user,email_send,text)
     server.quit()
