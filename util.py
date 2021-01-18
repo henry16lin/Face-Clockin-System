@@ -1,6 +1,7 @@
 import pandas as pd
 import datetime
 import sqlite3
+import os
 
 import smtplib
 from email.mime.text import MIMEText
