@@ -23,11 +23,11 @@ def face_registed_projector(model):
         #img = cv2.imread(file)
         img=cv2.imdecode(np.fromfile(file,dtype=np.uint8),-1)
         if '.jp' in file:
-            file_name = file.split('\\')[-1].split('.jp')[0]
+            file_name = os.path.basename(file).split('.jp')[0]
         elif '.png' in file:
-            file_name = file.split('\\')[-1].split('.png')[0]
+            file_name = os.path.basename(file).split('.png')[0]
         elif '.JPG' in file:
-            file_name = file.split('\\')[-1].split('.JPG')[0]
+            file_name = os.path.basename(file).split('.JPG')[0]
         print('registering for %s'%file_name)
         try:
             faces,points,bbox = model.get_input(img)
