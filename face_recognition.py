@@ -209,7 +209,6 @@ def face_comparison_video(args, registed_feature,cat,model,input_path,output_pat
     prev_time = timer()
 
     start_time = time.time()
-    cv2.startWindowThread()
     while True:
         return_value, frame = vid.read()
         
