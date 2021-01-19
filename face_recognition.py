@@ -209,6 +209,7 @@ def face_comparison_video(args, registed_feature,cat,model,input_path,output_pat
     prev_time = timer()
 
     start_time = time.time()
+    cv2.startWindowThread()
     while True:
         return_value, frame = vid.read()
         
@@ -220,8 +221,9 @@ def face_comparison_video(args, registed_feature,cat,model,input_path,output_pat
 
         time_out_flag = (time.time()-start_time)>30 # if timeout, then return people=[]
         if len(people)>0 or time_out_flag: #if detected some person, then return result image and break while loop
-            cv2.waitKey(1)
             cv2.destroyAllWindows()
+            for i in range (1,5):
+                cv2.waitKey(1)
             break
             
         curr_time = timer()
